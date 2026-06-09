@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to your location to display your live tracking progress on the map.</string>
+	<key>GoogleMapsApiKey</key>
+	<string>$(MAPS_API_KEY)</string>
 </dict>
 </plist>
