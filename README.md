@@ -34,22 +34,34 @@ Leverages official and community-trusted packages for robust geospatial mapping 
 *   `geolocator` — Interface for device-level GPS polling and position event streams.
 
 ### 2. Live Geolocation Stream Configuration
-The position stream is initialized inside `initState()` using optimal tracking filters to balance battery optimization and tracking accuracy:
+
+The position stream is initialized inside the `TrackingViewModel.startTracking()` method (following the MVVM pattern) using optimal tracking filters to balance battery optimization and tracking accuracy:
 
 ```dart
-LocationSettings locationSettings = const LocationSettings(
-  accuracy: LocationAccuracy.high,
-  distanceFilter: 10, // Triggers stream update every 10 meters of movement
+_positionStreamSubscription = Geolocator.getPositionStream(
+  locationSettings: locationSettings,
+).listen(
+  (Position position) {
+    _currentPosition = position;
+    _status = TrackingStatus.tracking;
+    _errorMessage = null;
+    notifyListeners();
+  },
+  onError: (error) { ... },
 );
 ```
 
 ### 3. Graceful Lifecycle Cleanup
-To prevent memory or stream leaks, the location subscription is explicitly dismantled when the screen widget is destroyed:
+
+This ViewModel disposal is triggered by the UI view state's `dispose()` method in `TrackingViewPage`:
 
 ```dart
 @override
 void dispose() {
-  _positionStreamSubscription?.cancel(); // Terminating the stream subscription
+  _viewModel.removeListener(_onViewModelChanged);
+  _viewModel.dispose(); // Dismantling subscriptions inside the ViewModel
+  _mapController?.dispose();
+  _markerAnimationController?.dispose();
   super.dispose();
 }
 ```
@@ -67,18 +79,18 @@ void dispose() {
 ```bash
    git clone <your-repository-url>
    cd <project-directory-name>
-   ```
+```
 
 2. Fetch dependencies:
 ```bash
    flutter pub get
-   ```
+```
 
 3. Configure your Google Maps API key:
-   * **Android:** Add your API key to `android/app/src/main/AndroidManifest.xml`
-   * **iOS:** Add your API key to `ios/Runner/AppDelegate.swift`
+  * **Android:** Add your API key to `android/secrets.properties` as `MAPS_API_KEY=Your_api_key`
+   * **iOS:** Add your API key to `ios/Flutter/Secrets.xcconfig` as `MAPS_API_KEY=Your_api_key`
 
 4. Deploy the application to a connected emulator or real device:
 ```bash
    flutter run
-   ```
+```
