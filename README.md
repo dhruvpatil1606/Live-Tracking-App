@@ -72,7 +72,7 @@ void dispose() {
 
 ### Prerequisites
 *   Flutter SDK installed on your local development machine.
-*   A valid **Google Maps API Key** configured with permissions for the Maps SDK (Android/iOS).
+*   A valid **Google Maps SDK API Key** configured with permissions for the Maps SDK (Android/iOS).
 
 ### Installation & Run Steps
 1. Clone this repository to your workspace:
@@ -86,7 +86,7 @@ void dispose() {
    flutter pub get
 ```
 
-3. Configure your Google Maps API key:
+3. Configure your Google Maps SDK API key for both android and ios:
   * **Android:** Add your API key to `android/secrets.properties` as `MAPS_API_KEY=Your_api_key`
    * **iOS:** Add your API key to `ios/Flutter/Secrets.xcconfig` as `MAPS_API_KEY=Your_api_key`
 
